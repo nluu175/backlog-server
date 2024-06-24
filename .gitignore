@@ -1,0 +1,11 @@
+# virtual env
+venv
+
+# env
+**/.env
+
+# vs code
+.vscode
+
+# database
+db.sqlite3
