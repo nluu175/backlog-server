@@ -4,7 +4,7 @@ from rest_framework import status
 
 from django.shortcuts import get_object_or_404
 
-from ..models.models import Game
+from ..models.Game import Game
 from ..serializers import GameSerializer
 
 

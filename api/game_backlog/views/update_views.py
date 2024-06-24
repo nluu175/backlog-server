@@ -6,7 +6,10 @@ import requests
 
 from django.shortcuts import get_object_or_404
 
-from ..models.models import Game, Backlog, User
+from ..models.Game import Game
+from ..models.Backlog import Backlog
+from ..models.User import User
+
 from ..serializers import GameSerializer, BacklogSerializer
 
 
