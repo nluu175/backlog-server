@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from .models.models import User, Genre, Game, Backlog
+from .models.User import User
+from .models.Genre import Genre
+from .models.Game import Game
+from .models.Backlog import Backlog
 
 
 class UserSerializer(serializers.ModelSerializer):
