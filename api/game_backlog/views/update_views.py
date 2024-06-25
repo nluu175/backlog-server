@@ -28,16 +28,17 @@ class UpdateView(APIView):
         :return: None
         """
 
-        # TODO: https://www.steamidfinder.com/
+        # NOTE: https://www.steamidfinder.com/
         # ---------- Check List
         # 0. Check whether steam_id is CORRECT and EXISTS IN OUR DATABASE (user with that steam_id exists in OUR database)
         # 1. Fetch games list from STEAM API (DONE)
-        # 2. Add game to Game table if it does not already exist (DONE)
-        # 3. Update the backlog (ASSUME no game is removed)
+        # 2. Add game(s) to Game table if they do not already exist there (DONE)
+        # 3. Add/Update the game in backlog (ASSUME no game is removed)
         user = get_object_or_404(User, steam_id=steam_id)
 
         if user:
             data_format = "json"
+
             try:
                 request_url = f"http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={STEAM_API_KEY}&steamid={steam_id}&include_appinfo=true&format={data_format}"
 
@@ -52,22 +53,42 @@ class UpdateView(APIView):
                 placeholder_genres = ["49941f0a-b60e-4ce0-baf2-378520c00a0a"]
 
                 for game in games_field:
-                    if not Game.objects.filter(steam_app_id=game["appid"]).exists():
-                        new_game = Game.objects.create(
-                            name=game["name"],
-                            description=placeholder_description,
-                            release_date=placeholder_release_date,
-                            platform=placeholder_platform,
-                            steam_app_id=game["appid"],
-                        )
+                    game_obj, created = Game.objects.get_or_create(
+                        steam_app_id=game["appid"],
+                        defaults={
+                            "name": game["name"],
+                            "description": placeholder_description,
+                            "release_date": placeholder_release_date,
+                            "platform": placeholder_platform,
+                        },
+                    )
 
-                        new_game.genres.set(placeholder_genres)
+                    if created:
+                        game_obj.genres.set(placeholder_genres)
+                        game_obj.save()
 
-                        new_game.save()
+                    backlog_entry_status = 0 if game["playtime_forever"] != 0 else 1
+                    backlog, backlog_created = Backlog.objects.get_or_create(
+                        user=user,
+                        game=game_obj,
+                        defaults={
+                            "status": backlog_entry_status,
+                            "rating": 0,
+                            "comment": None,
+                            "playtime": game["playtime_forever"],
+                        },
+                    )
 
+                    # backlog_created is False aka. have to update
+                    if not backlog_created:
+                        backlog.status = 1
+                        backlog.rating = 1
+                        backlog.playtime = game["playtime_forever"]
+                        backlog.save()
                 return Response(games_field, status=status.HTTP_200_OK)
+
             except requests.exceptions.HTTPError as error:
-                response_obj = {"message": error}
+                response_obj = {"message": str(error)}
                 return Response(response_obj, status=status.HTTP_400_BAD_REQUEST)
 
         # TODO: game logo

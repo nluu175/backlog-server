@@ -9,7 +9,7 @@ import datetime
 
 class Game(models.Model):
     def __str__(self):
-        return self.name + f" - ({self.id})"
+        return f"{self.name} - ({self.id})"
 
     def was_released_recently(self):
         return self.release_date >= timezone.now() - datetime.timedelta(days=1)
