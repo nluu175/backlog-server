@@ -29,6 +29,7 @@ class BacklogView(APIView):
             comment = serializer.validated_data["comment"]
             playtime = serializer.validated_data["playtime"]
 
+            # update status
             backlog.status = backlog_status
             backlog.rating = rating
             backlog.comment = comment
