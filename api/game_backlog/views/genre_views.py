@@ -13,9 +13,7 @@ from ..serializers import GenreSerializer
 class GenreView(APIView):
     http_method_names = ["get"]
 
-    # TODO: Write a Script to hard code list of genres into the database
-    # Currently aiming at hard-coding the genre list (posssibly get from STEAM)
-
+    # NOTE: Currently aiming at hard-coding the genre list (posssibly get from STEAM)
     def get(self, request, genre_id):
         genre = get_object_or_404(Game, id=genre_id)
         serializer = GenreSerializer(genre)

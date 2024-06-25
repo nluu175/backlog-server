@@ -9,12 +9,38 @@ from ..serializers import BacklogSerializer
 
 
 class BacklogView(APIView):
-    http_method_names = ["get"]
+    http_method_names = ["get", "put"]
 
     def get(self, request, backlog_id):
         backlog = get_object_or_404(Backlog, id=backlog_id)
         serializer = BacklogSerializer(backlog)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, backlog_id):
+        backlog = get_object_or_404(Backlog, id=backlog_id)
+        serializer = BacklogSerializer(backlog, data=request.data)
+
+        if serializer.is_valid():
+            # TODO: make fields optional
+            # user = serializer.validated_data["user"]
+            # game = serializer.validated_data["game"]
+            backlog_status = serializer.validated_data["status"]
+            rating = serializer.validated_data["rating"]
+            comment = serializer.validated_data["comment"]
+            playtime = serializer.validated_data["playtime"]
+
+            backlog.status = backlog_status
+            backlog.rating = rating
+            backlog.comment = comment
+            backlog.playtime = playtime
+
+            backlog.save()
+
+            return Response(
+                BacklogSerializer(backlog).data, status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BacklogsView(APIView):

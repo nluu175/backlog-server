@@ -9,7 +9,7 @@ from ..serializers import GameSerializer
 
 
 class GameView(APIView):
-    http_method_names = ["get"]
+    http_method_names = ["get", "put"]
 
     def get(self, request, game_id):
         game = get_object_or_404(Game, id=game_id)
