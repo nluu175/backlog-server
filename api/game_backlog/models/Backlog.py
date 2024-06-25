@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.contrib.auth.models import User
+from .User import User
 from .Game import Game
 
 import uuid
@@ -10,7 +10,12 @@ class Backlog(models.Model):
     class StatusTypes(models.IntegerChoices):
         NOT_STARTED = 0, "Not Started"
         IN_PROGRESS = 1, "In Progress"
+
+        # TODO: What make a game "Completed"?
         COMPLETED = 2, "Completed"
+
+    def __str__(self):
+        return f"{self.user.steam_id} - {self.game.name} - ({self.id})"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -5,7 +5,7 @@ import uuid
 
 class Genre(models.Model):
     def __str__(self):
-        return self.name + f" - ({self.id})"
+        return f"{self.name} - ({self.id})"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # name = display name
