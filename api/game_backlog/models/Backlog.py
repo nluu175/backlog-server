@@ -23,7 +23,6 @@ class Backlog(models.Model):
     status = models.IntegerField(choices=StatusTypes.choices)
     rating = models.FloatField(null=True, blank=True)  # personal rating
     comment = models.CharField(max_length=1000, null=True)
-
     # playtime in minutes
     playtime = models.IntegerField(default=0)
 

@@ -10,8 +10,6 @@ from ..models.Game import Game
 from ..models.Backlog import Backlog
 from ..models.User import User
 
-from ..serializers import GameSerializer, BacklogSerializer
-
 
 from ..environment import STEAM_API_KEY
 
@@ -34,6 +32,18 @@ class UpdateView(APIView):
         # 1. Fetch games list from STEAM API (DONE)
         # 2. Add game(s) to Game table if they do not already exist there (DONE)
         # 3. Add/Update the game in backlog (ASSUME no game is removed)
+
+        # TODO: game logo
+
+        # Source: https://stackoverflow.com/questions/53963328/how-do-i-get-a-hash-for-a-picture-form-a-steam-game
+
+        # ---------------- Pics Format
+        # http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg
+        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/hero_capsule.jpg
+        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/capsule_616x353.jpg
+        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/header.jpg
+        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/capsule_231x87.jpg
+
         user = get_object_or_404(User, steam_id=steam_id)
 
         if user:
@@ -85,19 +95,10 @@ class UpdateView(APIView):
                         backlog.rating = 1
                         backlog.playtime = game["playtime_forever"]
                         backlog.save()
+
                 return Response(games_field, status=status.HTTP_200_OK)
 
-            except requests.exceptions.HTTPError as error:
+            # TODO: Rewrite this
+            except requests.exceptions.RequestException as error:
                 response_obj = {"message": str(error)}
                 return Response(response_obj, status=status.HTTP_400_BAD_REQUEST)
-
-        # TODO: game logo
-        # http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg
-
-        # https://stackoverflow.com/questions/53963328/how-do-i-get-a-hash-for-a-picture-form-a-steam-game
-
-        # ---------------- Pics Format
-        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/hero_capsule.jpg
-        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/capsule_616x353.jpg
-        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/header.jpg
-        # https://cdn.cloudflare.steamstatic.com/steam/apps/1569040/capsule_231x87.jpg

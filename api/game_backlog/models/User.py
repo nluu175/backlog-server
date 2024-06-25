@@ -6,7 +6,7 @@ import uuid
 
 class User(models.Model):
     def __str__(self):
-        return f"username: {self.username} - steamid: {self.steam_id} - ({self.id})"
+        return f"[{self.username}] - [{self.steam_id}] - ({self.id})"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=100, unique=True)
