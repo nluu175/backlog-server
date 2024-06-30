@@ -5,6 +5,7 @@
 - Write a route to refresh steam info? (/refresh)
 - Review the ManyToMany in Backlog table (currently working fine)
 - Add transaction
+- Add pagination
 
 - Suggest game to play (in library)
 - Suggest game to buy?
