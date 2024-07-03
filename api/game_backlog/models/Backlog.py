@@ -20,7 +20,7 @@ class Backlog(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    status = models.IntegerField(choices=StatusTypes.choices)
+    status = models.IntegerField(choices=StatusTypes.choices, null=True)
     rating = models.FloatField(null=True, blank=True)  # personal rating
     comment = models.CharField(max_length=1000, null=True)
     # playtime in minutes

@@ -8,6 +8,10 @@ import datetime
 
 
 class Game(models.Model):
+    class PlatformTypes(models.IntegerChoices):
+        PC = 0, "Steam"
+        SWITCH = 1, "Switch"
+
     def __str__(self):
         return f"{self.name} - ({self.id})"
 
@@ -20,5 +24,5 @@ class Game(models.Model):
     description = models.TextField(null=True)
     release_date = models.DateField(null=True)
     genres = models.ManyToManyField(Genre)
-    platform = models.CharField(max_length=100, null=True)
-    steam_app_id = models.IntegerField(unique=True)
+    platform = models.IntegerField(choices=PlatformTypes.choices, null=True)
+    steam_app_id = models.IntegerField(unique=True, null=True)
