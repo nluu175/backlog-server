@@ -8,6 +8,7 @@ from ..models.Game import Game
 from ..serializers import GameSerializer
 
 
+# /backlog/games/{game_id}
 class GameView(APIView):
     http_method_names = ["get", "put"]
 
@@ -17,6 +18,7 @@ class GameView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# /backlog/games
 class GamesView(APIView):
     http_method_names = ["get", "post"]
 

@@ -1,20 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
 
 from django.shortcuts import get_object_or_404
 
 from ..models.Backlog import Backlog
 from ..serializers import BacklogSerializer
+from ..custom.pagination import BacklogPagination
 
 
-class CustomPagination(PageNumberPagination):
-    page_size = 10  # Number of items per page
-    page_size_query_param = "page_size"
-    max_page_size = 100
-
-
+# backlog/backlogs/{backlog_id}
 class BacklogView(APIView):
     http_method_names = ["get", "put"]
 
@@ -51,6 +46,7 @@ class BacklogView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# backlog/backlogs
 class BacklogsView(APIView):
     http_method_names = ["get", "post"]
 
@@ -58,17 +54,23 @@ class BacklogsView(APIView):
         # backlogs = Backlog.objects.all()
         # serializer = BacklogSerializer(backlogs, many=True)
         # return Response(serializer.data, status=status.HTTP_200_OK)
-        # Step 2: Instantiate the paginator and get the paginated queryset
-        paginator = CustomPagination()
-        backlogs = Backlog.objects.all()
-        paginated_backlogs = paginator.paginate_queryset(backlogs, request)
-        
-        # Step 3: Serialize the paginated queryset
-        serializer = BacklogSerializer(paginated_backlogs, many=True)
-        
-        # Step 4: Return the paginated response
-        return paginator.get_paginated_response(serializer.data)
 
+        backlogs = Backlog.objects.all()
+
+        # Check for pagination parameters
+        page = request.query_params.get("page")
+        page_size = request.query_params.get("size")
+
+        if page or page_size:
+            # If pagination parameters are provided, paginate the queryset
+            paginator = BacklogPagination()
+            paginated_backlogs = paginator.paginate_queryset(backlogs, request)
+            serializer = BacklogSerializer(paginated_backlogs, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            # If no pagination parameters, return all results
+            serializer = BacklogSerializer(backlogs, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = BacklogSerializer(data=request.data)
