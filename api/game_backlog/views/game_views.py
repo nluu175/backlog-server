@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from ..models.Game import Game
 from ..serializers import GameSerializer
+from ..custom.pagination import GamePagination
 
 
 # /backlog/games/{game_id}
@@ -24,8 +25,18 @@ class GamesView(APIView):
 
     def get(self, request):
         games = Game.objects.all()
-        serializer = GameSerializer(games, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+
+        page = request.query_params.get("page")
+        page_size = request.query_params.get("size")
+
+        if page or page_size:
+            paginator = GamePagination()
+            paginated_games = paginator.paginate_queryset(games, request)
+            serializer = GameSerializer(paginated_games, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            serializer = GameSerializer(games, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = GameSerializer(data=request.data)

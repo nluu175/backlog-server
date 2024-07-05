@@ -3,6 +3,9 @@ from django.db import models
 import uuid
 
 
+# NOTE: Source: https://steamdb.info/tags/#genre
+
+
 class Genre(models.Model):
     def __str__(self):
         return f"{self.name} - ({self.id})"

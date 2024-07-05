@@ -42,6 +42,20 @@ class GameSerializer(serializers.ModelSerializer):
 
 
 class BacklogSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
     class Meta:
         model = Backlog
-        fields = ["id", "user", "game", "status", "rating", "comment", "playtime"]
+        fields = [
+            "id",
+            "user",
+            "game",
+            "status",
+            "rating",
+            "comment",
+            "playtime",
+            "name",
+        ]
+
+    def get_name(self, obj):
+        return obj.game.name if obj.game else None

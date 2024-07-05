@@ -51,11 +51,7 @@ class BacklogsView(APIView):
     http_method_names = ["get", "post"]
 
     def get(self, request):
-        # backlogs = Backlog.objects.all()
-        # serializer = BacklogSerializer(backlogs, many=True)
-        # return Response(serializer.data, status=status.HTTP_200_OK)
-
-        backlogs = Backlog.objects.all()
+        backlogs = Backlog.objects.select_related("game").all()
 
         # Check for pagination parameters
         page = request.query_params.get("page")
