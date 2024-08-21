@@ -16,6 +16,8 @@ from ..environment import STEAM_API_KEY
 
 class UpdateView(APIView):
     http_method_names = ["post"]
+    
+    # TODO: Add serializer
 
     def post(self, request, steam_id):
         """

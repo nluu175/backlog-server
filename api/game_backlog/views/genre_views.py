@@ -7,13 +7,13 @@ from django.shortcuts import get_object_or_404
 from ..models.Genre import Genre
 from ..models.Game import Game
 
-from ..serializers import GenreSerializer
+from ..serializers.genre_serializer import GenreSerializer
 
 
 class GenreView(APIView):
     http_method_names = ["get"]
 
-    # NOTE: Currently aiming at hard-coding the genre list (posssibly get from STEAM)
+    # NOTE: Currently aiming at hard-coding the genre list (https://steamdb.info/tags/#genreAM)
     def get(self, request, genre_id):
         genre = get_object_or_404(Game, id=genre_id)
         serializer = GenreSerializer(genre)

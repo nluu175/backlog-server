@@ -5,7 +5,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from ..models.Backlog import Backlog
-from ..serializers import BacklogSerializer
+from ..serializers.backlog_serializer import BacklogSerializer
 from ..custom.pagination import BacklogPagination
 
 

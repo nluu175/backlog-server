@@ -5,7 +5,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from ..models.Game import Game
-from ..serializers import GameSerializer
+from ..serializers.game_serializer import GameSerializer
 from ..custom.pagination import GamePagination
 
 
