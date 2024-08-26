@@ -16,6 +16,7 @@ class BacklogSerializer(serializers.ModelSerializer):
             "rating",
             "comment",
             "playtime",
+            "favourite",
             # foreign fields
             "name",
             "steam_app_id",

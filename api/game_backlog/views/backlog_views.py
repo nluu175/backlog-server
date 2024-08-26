@@ -9,7 +9,7 @@ from ..serializers.backlog_serializer import BacklogSerializer
 from ..custom.pagination import BacklogPagination
 
 
-# backlog/backlogs/{backlog_id}
+# api/backlogs/{backlog_id}
 class BacklogView(APIView):
     http_method_names = ["get", "put"]
 
@@ -30,12 +30,14 @@ class BacklogView(APIView):
             rating = serializer.validated_data["rating"]
             comment = serializer.validated_data["comment"]
             playtime = serializer.validated_data["playtime"]
+            favourite = serializer.validated_data["favourite"]
 
             # update status
             backlog.status = backlog_status
             backlog.rating = rating
             backlog.comment = comment
             backlog.playtime = playtime
+            backlog.favourite = favourite
 
             backlog.save()
 
@@ -46,7 +48,7 @@ class BacklogView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# backlog/backlogs
+# api/backlogs
 class BacklogsView(APIView):
     http_method_names = ["get", "post"]
 
@@ -79,6 +81,7 @@ class BacklogsView(APIView):
             rating = serializer.validated_data["rating"]
             comment = serializer.validated_data["comment"]
             playtime = serializer.validated_data["playtime"]
+            favourite = serializer.validated_data["favourite"]
 
             backlog = Backlog.objects.create(
                 user=user,
@@ -87,6 +90,7 @@ class BacklogsView(APIView):
                 rating=rating,
                 comment=comment,
                 playtime=playtime,
+                favourite=favourite,
             )
 
             return Response(

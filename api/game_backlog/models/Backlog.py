@@ -25,6 +25,8 @@ class Backlog(models.Model):
     comment = models.CharField(max_length=1000, null=True)
     # playtime in minutes
     playtime = models.IntegerField(default=0)
+    # new
+    favourite = models.BooleanField(null=False, default=False)
 
     # user and game combination should be unique for each entry
     class Meta:

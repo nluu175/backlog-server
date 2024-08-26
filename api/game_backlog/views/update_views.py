@@ -16,7 +16,7 @@ from ..environment import STEAM_API_KEY
 
 class UpdateView(APIView):
     http_method_names = ["post"]
-    
+
     # TODO: Add serializer
 
     def post(self, request, steam_id):
@@ -34,8 +34,6 @@ class UpdateView(APIView):
         # 1. Fetch games list from STEAM API (DONE)
         # 2. Add game(s) to Game table if they do not already exist there (DONE)
         # 3. Add/Update the game in backlog (ASSUME no game is removed)
-
-        # TODO: game logo
 
         # Source: https://stackoverflow.com/questions/53963328/how-do-i-get-a-hash-for-a-picture-form-a-steam-game
 
