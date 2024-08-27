@@ -11,3 +11,9 @@ class GamePagination(PageNumberPagination):
     page_size = 10  # Number of items per page
     page_size_query_param = "size"
     max_page_size = 100
+
+
+class WishlistPagination(PageNumberPagination):
+    page_size = 10  # Number of items per page
+    page_size_query_param = "size"
+    max_page_size = 100

@@ -4,17 +4,18 @@
 
 - Add transaction
 
-- Suggest game to play (in library)
-- Suggest game to buy?
+- Integrate OPENAI
+
+> - Suggest game to play (in library)
+> - Suggest game to buy?
+> - Add games suggestion
 
 - User can add friend
 
-- Add games suggestion
+- Add games release tracker
 
-- Refactor
-  > - serializers.py
-  > - models.py
+- Add price
 
 ## Instructions
 
-- Please run the import data command to import all the game genres
+-Run the import data command to import all the game genres

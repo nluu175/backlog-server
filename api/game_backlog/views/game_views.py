@@ -9,7 +9,7 @@ from ..serializers.game_serializer import GameSerializer
 from ..custom.pagination import GamePagination
 
 
-# /backlog/games/{game_id}
+# /api/games/{game_id}
 class GameView(APIView):
     http_method_names = ["get", "put"]
 
@@ -19,7 +19,7 @@ class GameView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# /backlog/games
+# /api/games
 class GamesView(APIView):
     http_method_names = ["get", "post"]
 
