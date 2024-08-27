@@ -10,9 +10,8 @@
 
 - Integrate OPENAI
 
-  > - Suggest game to play (in library)
-  > - Suggest game to buy?
-  > - Add games suggestion
+  > - Suggest game to play based on genre (in library) [DONE]
+  > - Suggest game to buy? [NOT YET]
 
 - User can add friend
 
