@@ -6,15 +6,15 @@
 
 - Integrate OPENAI
 
-> - Suggest game to play (in library)
-> - Suggest game to buy?
-> - Add games suggestion
+  > - Suggest game to play (in library)
+  > - Suggest game to buy?
+  > - Add games suggestion
 
 - User can add friend
 
 - Add games release tracker
 
-- Add price
+- Add price in Game
 
 ## Instructions
 
