@@ -74,24 +74,26 @@ class BacklogsView(APIView):
         serializer = BacklogSerializer(data=request.data)
 
         if serializer.is_valid():
-            user = serializer.validated_data["user"]
-            game = serializer.validated_data["game"]
-            # cannot name this one status because this one will override status in rest_framework
-            progress_status = serializer.validated_data["status"]
-            rating = serializer.validated_data["rating"]
-            comment = serializer.validated_data["comment"]
-            playtime = serializer.validated_data["playtime"]
-            favourite = serializer.validated_data["favourite"]
+            # user = serializer.validated_data["user"]
+            # game = serializer.validated_data["game"]
+            # # cannot name this one status because this one will override status in rest_framework
+            # progress_status = serializer.validated_data["status"]
+            # rating = serializer.validated_data["rating"]
+            # comment = serializer.validated_data["comment"]
+            # playtime = serializer.validated_data["playtime"]
+            # favourite = serializer.validated_data["favourite"]
 
-            backlog = Backlog.objects.create(
-                user=user,
-                game=game,
-                status=progress_status,
-                rating=rating,
-                comment=comment,
-                playtime=playtime,
-                favourite=favourite,
-            )
+            # backlog = Backlog.objects.create(
+            #     user=user,
+            #     game=game,
+            #     status=progress_status,
+            #     rating=rating,
+            #     comment=comment,
+            #     playtime=playtime,
+            #     favourite=favourite,
+            # )
+
+            backlog = Backlog.objects.create(**serializer.validated_data)
 
             return Response(
                 BacklogSerializer(backlog).data, status=status.HTTP_201_CREATED

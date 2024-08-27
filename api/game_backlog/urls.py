@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .views import game_views, genre_views, backlog_views, update_views, auth_views
+from .views import (
+    game_views,
+    genre_views,
+    backlog_views,
+    update_views,
+    auth_views,
+    wishlist_views,
+)
 
 urlpatterns = [
     # Games
@@ -15,6 +22,16 @@ urlpatterns = [
         "backlogs/<uuid:backlog_id>/",
         backlog_views.BacklogView.as_view(),
         name="backlog",
+    ),
+    path(
+        "wishlists/",
+        wishlist_views.WishlistsView.as_view(),
+        name="wishlists",
+    ),
+    path(
+        "wishlists/<uuid:backlog_id>/",
+        wishlist_views.WishlistView.as_view(),
+        name="wishlist",
     ),
     path(
         "refresh/<str:steam_id>/",
