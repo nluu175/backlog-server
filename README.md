@@ -1,5 +1,9 @@
 # Backlog Server
 
+## Introduction
+
+- Welcome to the Backlog API documentation. This API was implemented to serve the Game Backlog App - A web-based application to help manage your game backlog in many gaming platforms.
+
 ## TODO:
 
 - Add transactions [Official Doc](https://docs.djangoproject.com/en/5.1/topics/db/transactions/)

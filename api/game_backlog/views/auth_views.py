@@ -1,6 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+
 from django.contrib.auth.models import User as DjangoUser
+
 from ..models.User import User
 from ..serializers.user_serializer import UserSerializer
 
@@ -12,7 +15,6 @@ class LoginView(APIView):
     http_method_names = ["post"]
 
     def post(self, request):
-        # serializer = UserSerializer(data=request.data)f
         username = request.data.get("username")
         password = request.data.get("password")
 
@@ -22,7 +24,9 @@ class LoginView(APIView):
             if user.is_active:
                 success = user.check_password(password)
                 if success:
-                    data = {"message": "Login successful"}
+                    # Generate token if not exists
+                    token, created = Token.objects.get_or_create(user=user)
+                    data = {"message": "Login successful", "token": token.key}
                     return Response(data, status=status.HTTP_200_OK)
                 else:
                     data = {"message": "Incorrect password"}
