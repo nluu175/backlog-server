@@ -8,3 +8,4 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 # env vars
 STEAM_API_KEY = env("STEAM_API_KEY")
+GEMINI_API_KEY = env("GEMINI_API_KEY")

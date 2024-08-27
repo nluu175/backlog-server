@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from ..models.Backlog import Backlog
+from ..environment import STEAM_API_KEY
 
 
 class SuggestionView(APIView):
@@ -17,7 +18,8 @@ class SuggestionView(APIView):
         # Curently only supports suggesting games to play based on the games in the library.
 
         # TODO: Refactor this genai model to another file so that it can be used in other views
-        genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+        # genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+        genai.configure(STEAM_API_KEY)
         model = genai.GenerativeModel("gemini-1.5-flash")
 
         # Fetch my backlog
