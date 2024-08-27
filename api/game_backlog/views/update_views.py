@@ -62,7 +62,7 @@ class UpdateView(APIView):
                 placeholder_platform = None
                 
                 # NOTE: THIS IS HARDCODED
-                placeholder_genres = ["85ec0fce-b987-410c-a20f-0edbceb22c5b"]
+                placeholder_genres = ["ff72feb3-7e12-449b-a24b-36dc05e15bc4"]
 
                 for game in games_field:
                     game_obj, created = Game.objects.get_or_create(

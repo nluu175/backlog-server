@@ -8,10 +8,11 @@
 
 - Add transactions [Official Doc](https://docs.djangoproject.com/en/5.1/topics/db/transactions/)
 
-- Integrate OPENAI
+- Integrate Gemini
 
   > - Suggest game to play based on genre (in library) [DONE]
   > - Suggest game to buy? [NOT YET]
+  > - Suggest a random game to play?
 
 - User can add friend
 
@@ -20,6 +21,8 @@
 - Add price(float) in Game
 
 - Support other platforms (eshop/Nintendo)
+
+- Authorize using token
 
 ## Instructions
 
