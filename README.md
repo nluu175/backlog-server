@@ -18,4 +18,5 @@
 
 ## Instructions
 
--Run the import data command to import all the game genres
+- Run the import data command to import all the game genres
+- Run `source venv`

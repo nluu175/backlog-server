@@ -6,7 +6,7 @@ from .Game import Game
 import uuid
 
 
-class Wishlist(models.Mode):
+class Wishlist(models.Model):
     def __str__(self):
         return f"{self.user.steam_id} - {self.game.name}"
 
@@ -21,5 +21,7 @@ class Wishlist(models.Mode):
         verbose_name = "wishlist"
         verbose_name_plural = "wishlists"
         constraints = [
-            models.UniqueConstraint(fields=["user", "game"], name="unique_user_game")
+            models.UniqueConstraint(
+                fields=["user", "game"], name="unique_wishlist_user_game"
+            )
         ]

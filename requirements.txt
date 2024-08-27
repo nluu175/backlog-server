@@ -3,3 +3,4 @@ djangorestframework
 requests
 django-environ
 django-cors-headers 
+openai

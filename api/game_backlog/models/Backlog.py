@@ -33,5 +33,7 @@ class Backlog(models.Model):
         verbose_name = "backlog"
         verbose_name_plural = "backlogs"
         constraints = [
-            models.UniqueConstraint(fields=["user", "game"], name="unique_user_game")
+            models.UniqueConstraint(
+                fields=["user", "game"], name="unique_backlog_user_game"
+            )
         ]
