@@ -2,7 +2,7 @@
 
 ## TODO:
 
-- Add transaction
+- Add transactions [Official Doc](https://docs.djangoproject.com/en/5.1/topics/db/transactions/)
 
 - Integrate OPENAI
 
@@ -12,9 +12,11 @@
 
 - User can add friend
 
-- Add games release tracker
+- Add games release tracker (web scraping)
 
-- Add price in Game
+- Add price(float) in Game
+
+- Support other platforms (eshop/Nintendo)
 
 ## Instructions
 

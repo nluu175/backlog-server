@@ -1,4 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from .views import (
     game_views,
@@ -7,6 +10,20 @@ from .views import (
     update_views,
     auth_views,
     wishlist_views,
+    suggestion_views,
+)
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Game Backlog API",
+        default_version="v1",
+        description="Game Backlog API",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="contact@yourapi.local"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
@@ -23,11 +40,8 @@ urlpatterns = [
         backlog_views.BacklogView.as_view(),
         name="backlog",
     ),
-    path(
-        "wishlists/",
-        wishlist_views.WishlistsView.as_view(),
-        name="wishlists",
-    ),
+    # Wishlists
+    path("wishlists/", wishlist_views.WishlistsView.as_view(), name="wishlists"),
     path(
         "wishlists/<uuid:backlog_id>/",
         wishlist_views.WishlistView.as_view(),
@@ -38,14 +52,23 @@ urlpatterns = [
         update_views.UpdateView.as_view(),
         name="backlog-refresh",
     ),
+    path("user/login/", auth_views.LoginView.as_view(), name="user-login"),
+    path("user/signup/", auth_views.SignUpView.as_view(), name="user-signup"),
     path(
-        "user/login/",
-        auth_views.LoginView.as_view(),
-        name="user-login",
+        "suggestions/", suggestion_views.SuggestionView.as_view(), name="ai-suggestion"
     ),
-    path(
-        "user/signup/",
-        auth_views.SignUpView.as_view(),
-        name="user-signup",
+    # Swagger URLs
+    re_path(
+        r"^swagger(?P<format>\.json|\.yaml)$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^swagger/$",
+        schema_view.with_ui("swagger", cache_timeout=0),
+        name="schema-swagger-ui",
+    ),
+    re_path(
+        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
 ]
