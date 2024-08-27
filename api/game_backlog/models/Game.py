@@ -8,6 +8,10 @@ import datetime
 
 
 class Game(models.Model):
+    class Meta:
+        verbose_name = "game"
+        verbose_name_plural = "games"
+
     class PlatformTypes(models.IntegerChoices):
         PC = 0, "Steam"
         SWITCH = 1, "Switch"

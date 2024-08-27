@@ -11,7 +11,7 @@ class Backlog(models.Model):
         NOT_STARTED = 0, "Not Started"
         IN_PROGRESS = 1, "In Progress"
 
-        # TODO: What make a game "Completed"?
+        # TODO: What make a game "Completed"? Can introduce an option to set the game as "Completed" when the user wants to.
         COMPLETED = 2, "Completed"
 
     def __str__(self):
@@ -30,6 +30,8 @@ class Backlog(models.Model):
 
     # user and game combination should be unique for each entry
     class Meta:
+        verbose_name = "backlog"
+        verbose_name_plural = "backlogs"
         constraints = [
             models.UniqueConstraint(fields=["user", "game"], name="unique_user_game")
         ]

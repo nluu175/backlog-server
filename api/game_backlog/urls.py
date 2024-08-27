@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import game_views, genre_views, backlog_views, update_views
+from .views import game_views, genre_views, backlog_views, update_views, auth_views
 
 urlpatterns = [
     # Games
@@ -20,5 +20,15 @@ urlpatterns = [
         "refresh/<str:steam_id>/",
         update_views.UpdateView.as_view(),
         name="backlog-refresh",
+    ),
+    path(
+        "user/login/",
+        auth_views.LoginView.as_view(),
+        name="user-login",
+    ),
+    path(
+        "user/signup/",
+        auth_views.SignUpView.as_view(),
+        name="user-signup",
     ),
 ]

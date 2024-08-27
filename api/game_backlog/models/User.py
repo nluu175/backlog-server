@@ -5,11 +5,15 @@ import uuid
 
 
 class User(models.Model):
+    class Meta:
+        verbose_name = "user"
+        verbose_name_plural = "users"
+
     def __str__(self):
-        return f"[{self.username}] - [{self.steam_id}] - ({self.id})"
+        return f"[{self.steam_name}] - [{self.steam_id}] - ({self.id})"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(max_length=100, unique=True)
+    steam_name = models.CharField(max_length=100, unique=True)
     email = models.EmailField()
     steam_id = models.CharField(max_length=100, null=True)
 
