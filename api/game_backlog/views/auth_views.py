@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import ValidationError
 
 from django.contrib.auth.models import User as DjangoUser
 
 from ..models.User import User
 from ..serializers.user_serializer import UserSerializer
-from ..serializers.custom_auth_serializer import CustomLoginSerializer
+from ..serializers.custom_auth_serializer import LoginSerializer
 
 from rest_framework import status
 
@@ -15,17 +16,43 @@ class LoginView(APIView):
     http_method_names = ["post"]
 
     def post(self, request):
-        serializer = CustomLoginSerializer(data=request.data)
+        serializer = LoginSerializer(data=request.data)
 
-        if serializer.is_valid():
-            user = serializer.validated_data["user"]
-            # Generate token if not exists
-            token, created = Token.objects.get_or_create(user=user)
-            data = {"message": "Login successful", "token": token.key}
+        try:
+            if serializer.is_valid(raise_exception=True):
+                user = serializer.validated_data["user"]
+                token, created = Token.objects.get_or_create(user=user)
+                data = {"message": "Login successful", "token": token.key}
 
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data, status=status.HTTP_200_OK)
+
+        except ValidationError as e:
+            # have to get index [0] because error_code is a list
+            error_code = e.detail.get("code")[0]
+
+            response_mapping = {
+                "inactive_user": Response(
+                    {"detail": e.detail.get("detail")}, status=status.HTTP_403_FORBIDDEN
+                ),
+                "invalid_credentials": Response(
+                    {"detail": e.detail.get("detail")},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                ),
+                "missing_credentials": Response(
+                    {"detail": e.detail.get("detail")},
+                    status=status.HTTP_400_BAD_REQUEST,
+                ),
+            }
+
+            response_object = response_mapping.get(
+                error_code,
+                Response(
+                    {"detail": "An error occurred"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                ),
+            )
+
+            return response_object
 
 
 class SignUpView(APIView):
