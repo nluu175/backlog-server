@@ -20,7 +20,8 @@ class LoginView(APIView):
         try:
             if serializer.is_valid(raise_exception=True):
                 user = serializer.validated_data["user"]
-                token, created = Token.objects.get_or_create(user=user)
+                # token, created = Token.objects.get_or_create(user=user)
+                token = Token.objects.create(user=user)
                 data = {"message": "Login successful", "token": token.key}
 
                 return Response(data, status=status.HTTP_200_OK)
@@ -52,6 +53,19 @@ class LoginView(APIView):
             )
 
             return response_object
+
+
+class LogoutView(APIView):
+    http_method_names = ["post"]
+
+    def post(self, request):
+        username = request.data.get("username")
+        user = DjangoUser.objects.get(username=username)
+
+        # Remove token on logout
+        Token.objects.filter(user=user).delete()
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class SignUpView(APIView):

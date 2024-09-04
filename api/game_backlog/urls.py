@@ -47,13 +47,17 @@ urlpatterns = [
         wishlist_views.WishlistView.as_view(),
         name="wishlist",
     ),
+    # Refresh
     path(
         "refresh/<str:steam_id>/",
         update_views.UpdateView.as_view(),
         name="backlog-refresh",
     ),
+    # Authentication
     path("user/login/", auth_views.LoginView.as_view(), name="user-login"),
+    path("user/logout/", auth_views.LogoutView.as_view(), name="user-logout"),
     path("user/signup/", auth_views.SignUpView.as_view(), name="user-signup"),
+    # Suggestion
     path(
         "suggestions/", suggestion_views.SuggestionView.as_view(), name="ai-suggestion"
     ),
