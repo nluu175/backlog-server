@@ -15,7 +15,7 @@ class User(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     steam_name = models.CharField(max_length=100, unique=True)
     email = models.EmailField()
-    steam_id = models.CharField(max_length=100, null=True)
+    steam_id = models.CharField(max_length=100, unique=True, null=True)
 
     # One to One object with django default user
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)

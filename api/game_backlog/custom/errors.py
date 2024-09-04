@@ -19,6 +19,20 @@ class InactiveUserError(ValidationError):
     default_detail = {"detail": "User account is not active.", "code": "inactive_user"}
 
 
+class UsernameAlreadyExistsError(ValidationError):
+    default_detail = {
+        "detail": "Username already exists.",
+        "code": "duplicate_username",
+    }
+
+
+class SteamAccountAlreadyExistsError(ValidationError):
+    default_detail = {
+        "detail": "Steam account already exists.",
+        "code": "duplicate_steam_account",
+    }
+
+
 # from rest_framework.exceptions import APIException
 # from rest_framework import status
 
