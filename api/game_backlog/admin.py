@@ -5,9 +5,51 @@ from .models.Game import Game
 from .models.Backlog import Backlog
 from .models.Wishlist import Wishlist
 
-# Register your models here.
-admin.site.register(User)
-admin.site.register(Genre)
-admin.site.register(Game)
-admin.site.register(Backlog)
-admin.site.register(Wishlist)
+
+# Custom dashboard models
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("steam_name", "email", "steam_id", "user")
+
+
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ("name", "code")
+
+
+class GameAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "description",
+        "release_date",
+        "get_genres",  # Use the custom method here
+        "platform",
+        "steam_app_id",
+    )
+
+    def get_genres(self, obj):
+        return ", ".join([genre.name for genre in obj.genres.all()])
+
+    get_genres.short_description = "genres"
+
+
+class BacklogAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "game",
+        "status",
+        "rating",
+        "comment",
+        "playtime",
+        "favourite",
+    )
+
+
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ("user", "game", "order")
+
+
+# Register models
+admin.site.register(User, UserAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Game, GameAdmin)
+admin.site.register(Backlog, BacklogAdmin)
+admin.site.register(Wishlist, WishlistAdmin)
