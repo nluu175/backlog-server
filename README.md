@@ -7,22 +7,24 @@
 ## TODO:
 
 - Add transactions [Official Doc](https://docs.djangoproject.com/en/5.1/topics/db/transactions/)
-  > - `with transaction.atomic():`
+  > - `with transaction.atomic():` [DONE]
 - Integrate Gemini
 
   > - Suggest game to play based on genre (in library) [DONE]
-  > - Suggest game to buy? [NOT YET]
+  > - Suggest game to buy? [NOT-YET]
   > - Suggest a random game to play?
 
 - User can add friend
 
-- Add games release tracker (web scraping)
+- Add games release tracker (web scraping) [BIG]
 
 - Add price(float) in Game
 
 - Support other platforms (eshop/Nintendo)
 
 - Authenticate/Authorize using token [DONE]
+
+- Add table GameSuggestion to cache game request result. []
 
 ## Instructions
 

@@ -1,14 +1,17 @@
-import google.generativeai as genai
-import ast
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from django.db import transaction
+
 from ..models.Backlog import Backlog
-from ..environment import GEMINI_API_KEY
+from ..models.SuggestionGame import SuggestionGame
+from ..models.User import User
+
+from ..services.genai_service import GenAIService
+from ..utils.response_processor import process_genai_response
 
 
 class SuggestionView(APIView):
@@ -17,61 +20,45 @@ class SuggestionView(APIView):
 
     http_method_names = ["get"]
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.genai_service = GenAIService()
+
+    @transaction.atomic
     def get(self, request, *args, **kwargs):
-        # TODO: Give the option to cache the result. Can handle this with a parameter REFRESH?
-        # Curently only supports suggesting games to play based on the games in the library.
-
-        # TODO: Refactor this genai model to another file so that it can be used in other views
-        # genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-        genai.configure(api_key=GEMINI_API_KEY)
-        model = genai.GenerativeModel("gemini-1.5-flash")
-
-        # Fetch my backlog
-        game_data = list(
-            Backlog.objects.select_related("game").values_list(
-                "game__name",
-                "game__steam_app_id",
-                flat=False,
-            )
-        )
-
-        game_list = game_data
-
         game_genre_request = request.query_params.get("game_genre_request", None)
-        if game_genre_request is None:
+        if not game_genre_request:
             return Response(
                 {"error": "No game_genre_request parameter provided."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        genre_prompt = game_genre_request
-
-        prompt_msg = (
-            "Suggest me a list of games to play."
-            + f"The genre is {genre_prompt}. Give the output in python list format like this [(games, steam_id)] and use double quote for string."
-            + 'The output example should be like this [("game1", 1234), ("game2", 5678)]. '
-            + "Here is the list. "
-            + str(game_list)
-            + "List must have maximum 5 games."
+        game_data = list(
+            Backlog.objects.select_related("game").values_list(
+                "game__name", "game__steam_app_id", flat=False
+            )
         )
 
-        genai_response = model.generate_content(prompt_msg)
-
-        # # TODO: Add exception for wrong format.
-        # # TODO: Refactor this string processor
-        genai_response_text = genai_response.text
         try:
-            if "python\n" in genai_response_text:
-                cleaned_string = (
-                    genai_response_text.strip().strip("```python\n").strip("```")
-                )
+            genai_response = self.genai_service.generate_game_suggestions(
+                genre_prompt=game_genre_request,
+                game_list=game_data,
+            )
+            games_list_processed = process_genai_response(genai_response.text)
 
-            games_list_processed = ast.literal_eval(cleaned_string)
+            game_id_list = [game_item[1] for game_item in games_list_processed]
+
+            # TODO: REFACTOR THIS INTO A SERVICE
+            SuggestionGame.objects.create(
+                suggestion_type=SuggestionGame.SuggestionTypes.BY_GENRE,
+                user=User.objects.get(user=request.user),
+                game_list=" ".join(str(x) for x in game_id_list),
+            )
+
             response = {
                 "game_genre": game_genre_request,
                 "game_list": games_list_processed,
             }
-
             return Response(response, status=status.HTTP_200_OK)
 
         except Exception as e:

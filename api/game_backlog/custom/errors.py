@@ -16,7 +16,10 @@ class InvalidCredentialsError(ValidationError):
 
 
 class InactiveUserError(ValidationError):
-    default_detail = {"detail": "User account is not active.", "code": "inactive_user"}
+    default_detail = {
+        "detail": "User account is not active.", 
+        "code": "inactive_user"
+    }
 
 
 class UsernameAlreadyExistsError(ValidationError):

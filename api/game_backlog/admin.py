@@ -4,6 +4,7 @@ from .models.Genre import Genre
 from .models.Game import Game
 from .models.Backlog import Backlog
 from .models.Wishlist import Wishlist
+from .models.SuggestionGame import SuggestionGame
 
 
 # Custom dashboard models
@@ -53,3 +54,4 @@ admin.site.register(Genre, GenreAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Backlog, BacklogAdmin)
 admin.site.register(Wishlist, WishlistAdmin)
+admin.site.register(SuggestionGame)
