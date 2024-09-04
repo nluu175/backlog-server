@@ -24,9 +24,7 @@ class WishlistView(APIView):
         serializer = WishlistSerializer(wishlist, data=request.data)
 
         if serializer.is_valid():
-            order = serializer.validated_data["order"]
-
-            wishlist.order = order
+            wishlist.order = serializer.validated_data["order"]
 
             return Response(
                 WishlistSerializer(wishlist).data, status=status.HTTP_201_CREATED

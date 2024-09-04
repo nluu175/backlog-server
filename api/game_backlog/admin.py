@@ -20,7 +20,7 @@ class GameAdmin(admin.ModelAdmin):
         "name",
         "description",
         "release_date",
-        "get_genres",  # Use the custom method here
+        "get_genres",  # many to many field
         "platform",
         "steam_app_id",
     )

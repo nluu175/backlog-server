@@ -23,23 +23,25 @@ class BacklogView(APIView):
         serializer = BacklogSerializer(backlog, data=request.data)
 
         if serializer.is_valid():
-            # TODO: make fields optional
-            # user = serializer.validated_data["user"]
-            # game = serializer.validated_data["game"]
-            backlog_status = serializer.validated_data["status"]
-            rating = serializer.validated_data["rating"]
-            comment = serializer.validated_data["comment"]
-            playtime = serializer.validated_data["playtime"]
-            favourite = serializer.validated_data["favourite"]
+            # # TODO: make fields optional
+            # # user = serializer.validated_data["user"]
+            # # game = serializer.validated_data["game"]
+            # backlog_status = serializer.validated_data["status"]
+            # rating = serializer.validated_data["rating"]
+            # comment = serializer.validated_data["comment"]
+            # playtime = serializer.validated_data["playtime"]
+            # favourite = serializer.validated_data["favourite"]
 
-            # update status
-            backlog.status = backlog_status
-            backlog.rating = rating
-            backlog.comment = comment
-            backlog.playtime = playtime
-            backlog.favourite = favourite
+            # # update status
+            # backlog.status = backlog_status
+            # backlog.rating = rating
+            # backlog.comment = comment
+            # backlog.playtime = playtime
+            # backlog.favourite = favourite
 
-            backlog.save()
+            # backlog.save()
+
+            backlog.update(**serializer.validated_data)
 
             return Response(
                 BacklogSerializer(backlog).data, status=status.HTTP_201_CREATED
@@ -95,8 +97,8 @@ class BacklogsView(APIView):
 
             backlog = Backlog.objects.create(**serializer.validated_data)
 
-            return Response(
-                BacklogSerializer(backlog).data, status=status.HTTP_201_CREATED
-            )
+            serializer = BacklogSerializer(backlog).data
+
+            return Response(serializer, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

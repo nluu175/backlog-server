@@ -60,7 +60,7 @@ class UpdateView(APIView):
                 placeholder_description = None
                 placeholder_release_date = None
                 placeholder_platform = None
-                
+
                 # NOTE: THIS IS HARDCODED
                 placeholder_genres = ["ff72feb3-7e12-449b-a24b-36dc05e15bc4"]
 
