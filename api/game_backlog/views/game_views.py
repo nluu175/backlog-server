@@ -1,15 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 
 from ..models.Game import Game
 from ..serializers.game_serializer import GameSerializer
 from ..custom.pagination import GamePagination
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 
 # /api/games/{game_id}
@@ -19,7 +19,7 @@ class GameView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    http_method_names = ["get", "put"]
+    http_method_names = ["get"]
 
     def get(self, request, game_id):
         game = get_object_or_404(Game, id=game_id)
@@ -49,6 +49,7 @@ class GamesView(APIView):
             serializer = GameSerializer(games, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @transaction.atomic
     def post(self, request):
         serializer = GameSerializer(data=request.data)
 

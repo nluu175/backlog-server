@@ -1,15 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 
 from ..models.Backlog import Backlog
 from ..serializers.backlog_serializer import BacklogSerializer
 from ..custom.pagination import BacklogPagination
 
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 # api/backlogs/{backlog_id}
 class BacklogView(APIView):
@@ -23,6 +24,7 @@ class BacklogView(APIView):
         serializer = BacklogSerializer(backlog)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @transaction.atomic
     def put(self, request, backlog_id):
         backlog = get_object_or_404(Backlog, id=backlog_id)
         serializer = BacklogSerializer(backlog, data=request.data)
@@ -80,6 +82,7 @@ class BacklogsView(APIView):
             serializer = BacklogSerializer(backlogs, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @transaction.atomic
     def post(self, request):
         serializer = BacklogSerializer(data=request.data)
 

@@ -4,17 +4,17 @@ import ast
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from ..models.Backlog import Backlog
 from ..environment import GEMINI_API_KEY
 
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 class SuggestionView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
     http_method_names = ["get"]
 
     def get(self, request, *args, **kwargs):

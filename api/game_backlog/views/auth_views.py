@@ -2,18 +2,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
+from rest_framework import status
 
 from django.contrib.auth.models import User as DjangoUser
+from django.db import transaction
 
 from ..models.User import User
 from ..serializers.auth_serializer import LoginSerializer, SignUpSerializer
-
-from rest_framework import status
 
 
 class LoginView(APIView):
     http_method_names = ["post"]
 
+    @transaction.atomic
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
 
@@ -58,6 +59,7 @@ class LoginView(APIView):
 class LogoutView(APIView):
     http_method_names = ["post"]
 
+    @transaction.atomic
     def post(self, request):
         username = request.data.get("username")
         user = DjangoUser.objects.get(username=username)
@@ -71,6 +73,7 @@ class LogoutView(APIView):
 class SignUpView(APIView):
     http_method_names = ["post"]
 
+    @transaction.atomic
     def post(self, request):
         serializer = SignUpSerializer(data=request.data)
 

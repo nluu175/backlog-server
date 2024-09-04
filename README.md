@@ -7,7 +7,7 @@
 ## TODO:
 
 - Add transactions [Official Doc](https://docs.djangoproject.com/en/5.1/topics/db/transactions/)
-
+  > - `with transaction.atomic():`
 - Integrate Gemini
 
   > - Suggest game to play based on genre (in library) [DONE]
@@ -22,7 +22,7 @@
 
 - Support other platforms (eshop/Nintendo)
 
-- Authorize using token
+- Authenticate/Authorize using token [DONE]
 
 ## Instructions
 

@@ -1,16 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 
 from ..models.Genre import Genre
 from ..models.Game import Game
 
 from ..serializers.genre_serializer import GenreSerializer
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 
 class GenreView(APIView):

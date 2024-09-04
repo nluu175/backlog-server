@@ -1,20 +1,19 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
-import requests
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
+from django.db import transaction
+
+import requests
 
 from ..models.Game import Game
 from ..models.Backlog import Backlog
 from ..models.User import User
 
-
 from ..environment import STEAM_API_KEY
-
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
 
 
 class UpdateView(APIView):
@@ -25,6 +24,7 @@ class UpdateView(APIView):
 
     # TODO: Add serializer
 
+    @transaction.atomic
     def post(self, request, steam_id):
         """
         Refresh and update the backlog for user with id steam_id
