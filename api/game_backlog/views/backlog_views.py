@@ -8,9 +8,14 @@ from ..models.Backlog import Backlog
 from ..serializers.backlog_serializer import BacklogSerializer
 from ..custom.pagination import BacklogPagination
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # api/backlogs/{backlog_id}
 class BacklogView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["get", "put"]
 
     def get(self, request, backlog_id):
@@ -52,6 +57,9 @@ class BacklogView(APIView):
 
 # api/backlogs
 class BacklogsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["get", "post"]
 
     def get(self, request):

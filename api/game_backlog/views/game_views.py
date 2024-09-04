@@ -8,9 +8,17 @@ from ..models.Game import Game
 from ..serializers.game_serializer import GameSerializer
 from ..custom.pagination import GamePagination
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 # /api/games/{game_id}
 class GameView(APIView):
+    # The view will only allow requests from users who provide a valid authentication token.
+    # Only authenticated users (those with a valid token) will be permitted to interact with the view.
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["get", "put"]
 
     def get(self, request, game_id):
@@ -21,6 +29,9 @@ class GameView(APIView):
 
 # /api/games
 class GamesView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["get", "post"]
 
     def get(self, request):

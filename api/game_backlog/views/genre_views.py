@@ -9,8 +9,14 @@ from ..models.Game import Game
 
 from ..serializers.genre_serializer import GenreSerializer
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 class GenreView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["get"]
 
     # NOTE: Currently aiming at hard-coding the genre list (https://steamdb.info/tags/#genreAM)
@@ -21,6 +27,9 @@ class GenreView(APIView):
 
 
 class GenresView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["get"]
 
     def get(self, request):

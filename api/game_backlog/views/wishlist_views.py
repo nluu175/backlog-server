@@ -9,9 +9,15 @@ from ..models.Wishlist import Wishlist
 from ..serializers.wishlist_serializer import WishlistSerializer
 from ..custom.pagination import WishlistPagination
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 # api/wishlists/{wishlist_id}
 class WishlistView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     http_method_names = ["get", "put"]
 
     def get(self, request, wishlist_id):
@@ -35,6 +41,9 @@ class WishlistView(APIView):
 
 # api/wishlists
 class WishlistsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     http_method_names = ["get", "post"]
 
     def get(self, request):

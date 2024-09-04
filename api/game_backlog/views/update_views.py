@@ -13,8 +13,14 @@ from ..models.User import User
 
 from ..environment import STEAM_API_KEY
 
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 class UpdateView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
     http_method_names = ["post"]
 
     # TODO: Add serializer
