@@ -6,6 +6,7 @@ from rest_framework import status
 
 from django.contrib.auth.models import User as DjangoUser
 from django.db import transaction
+from django.http import HttpRequest
 
 from ..models.User import User
 from ..serializers.auth_serializer import LoginSerializer, SignUpSerializer
@@ -15,13 +16,12 @@ class LoginView(APIView):
     http_method_names = ["post"]
 
     @transaction.atomic
-    def post(self, request):
+    def post(self, request: HttpRequest):
         serializer = LoginSerializer(data=request.data)
 
         try:
             if serializer.is_valid(raise_exception=True):
                 user = serializer.validated_data["user"]
-                # token, created = Token.objects.get_or_create(user=user)
                 token = Token.objects.create(user=user)
                 data = {"message": "Login successful", "token": token.key}
 
@@ -60,7 +60,7 @@ class LogoutView(APIView):
     http_method_names = ["post"]
 
     @transaction.atomic
-    def post(self, request):
+    def post(self, request: HttpRequest):
         username = request.data.get("username")
         user = DjangoUser.objects.get(username=username)
 
@@ -74,7 +74,7 @@ class SignUpView(APIView):
     http_method_names = ["post"]
 
     @transaction.atomic
-    def post(self, request):
+    def post(self, request: HttpRequest):
         serializer = SignUpSerializer(data=request.data)
 
         try:
@@ -121,7 +121,7 @@ class SignUpView(APIView):
             response_object = response_mapping.get(
                 error_code,
                 Response(
-                    {"detail": "An error occurred"},
+                    {"detail": "An error occurred. Please try again."},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 ),
             )

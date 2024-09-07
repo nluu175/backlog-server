@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from django.http import HttpRequest
 
 from ..models.Backlog import Backlog
 from ..serializers.backlog_serializer import BacklogSerializer
@@ -19,13 +20,13 @@ class BacklogView(APIView):
 
     http_method_names = ["get", "put"]
 
-    def get(self, request, backlog_id):
+    def get(self, request: HttpRequest, backlog_id):
         backlog = get_object_or_404(Backlog, id=backlog_id)
         serializer = BacklogSerializer(backlog)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    def put(self, request, backlog_id):
+    def put(self, request: HttpRequest, backlog_id):
         backlog = get_object_or_404(Backlog, id=backlog_id)
         serializer = BacklogSerializer(backlog, data=request.data)
 
@@ -64,7 +65,7 @@ class BacklogsView(APIView):
 
     http_method_names = ["get", "post"]
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         backlogs = Backlog.objects.select_related("game").all()
 
         # Check for pagination parameters
@@ -83,7 +84,7 @@ class BacklogsView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    def post(self, request):
+    def post(self, request: HttpRequest):
         serializer = BacklogSerializer(data=request.data)
 
         if serializer.is_valid():

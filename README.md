@@ -24,7 +24,9 @@
 
 - Authenticate/Authorize using token [DONE]
 
-- Add table GameSuggestion to cache game request result. []
+- Add table GameSuggestion to cache game request result. [DONE]
+
+- Move all Error and Exception to errors.py
 
 ## Instructions
 

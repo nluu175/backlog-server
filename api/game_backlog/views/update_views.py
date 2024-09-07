@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from django.http import HttpRequest
 
 import requests
 
@@ -25,7 +26,7 @@ class UpdateView(APIView):
     # TODO: Add serializer
 
     @transaction.atomic
-    def post(self, request, steam_id):
+    def post(self, request: HttpRequest, steam_id):
         """
         Refresh and update the backlog for user with id steam_id
 

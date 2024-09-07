@@ -1,10 +1,12 @@
+from django.http import HttpRequest
+from django.db import transaction
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from django.db import transaction
 
 from ..models.Backlog import Backlog
 from ..models.SuggestionGame import SuggestionGame
@@ -25,7 +27,7 @@ class SuggestionView(APIView):
         self.genai_service = GenAIService()
 
     @transaction.atomic
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs):
         """
         Cache the result of the suggestion in GameSuggestion database.
         Will automatically refresh the cache if the user WANTS to. This can be done by passing a refresh (Boolean) param.
@@ -34,7 +36,6 @@ class SuggestionView(APIView):
             - refresh (boolean): refetch the suggestion from the model (default: false)
         """
         game_genre_request = request.query_params.get("game_genre_request", None)
-
         refresh = request.query_params.get("refresh")
         if refresh.lower() == "true":
             refresh = True
@@ -51,7 +52,7 @@ class SuggestionView(APIView):
                     user=User.objects.get(user=request.user),
                 )
                 .order_by(
-                    "created_at",  # - before column name mean "descending order", while without - mean "ascending".
+                    "created_at",  #  a `-` before column name mean "descending order", while without - mean "ascending".
                 )
                 .first()
             )
@@ -64,10 +65,14 @@ class SuggestionView(APIView):
                 )
 
             else:
+                game_list_to_int = [
+                    int(game_id)
+                    for game_id in suggestion_game_object.game_list.split(" ")
+                ]
                 return Response(
                     {
                         "game_genre": game_genre_request,
-                        "game_list": suggestion_game_object.game_list,
+                        "game_list": game_list_to_int,
                     }
                 )
         else:
@@ -89,7 +94,8 @@ class SuggestionView(APIView):
                     game_list=game_data,
                 )
                 games_list_processed = process_genai_response(genai_response.text)
-                game_name_list = [game_item[0] for game_item in games_list_processed]
+
+                # game_name_list = [game_item[0] for game_item in games_list_processed]
                 game_id_list = [game_item[1] for game_item in games_list_processed]
 
                 SuggestionGame.objects.create(
@@ -100,7 +106,7 @@ class SuggestionView(APIView):
 
                 response = {
                     "game_genre": game_genre_request,
-                    "game_list": game_name_list,
+                    "game_list": game_id_list,
                 }
 
                 return Response(response, status=status.HTTP_200_OK)

@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
 from django.db import transaction
+from django.http import HttpRequest
 
 from ..models.Game import Game
 from ..serializers.game_serializer import GameSerializer
@@ -21,7 +22,7 @@ class GameView(APIView):
 
     http_method_names = ["get"]
 
-    def get(self, request, game_id):
+    def get(self, request: HttpRequest, game_id):
         game = get_object_or_404(Game, id=game_id)
         serializer = GameSerializer(game)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -34,7 +35,7 @@ class GamesView(APIView):
 
     http_method_names = ["get", "post"]
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         games = Game.objects.all()
 
         page = request.query_params.get("page")
@@ -50,7 +51,7 @@ class GamesView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     @transaction.atomic
-    def post(self, request):
+    def post(self, request: HttpRequest):
         serializer = GameSerializer(data=request.data)
 
         if serializer.is_valid():
