@@ -11,7 +11,16 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
 
+# Set Up Environment Variables
+env = environ.Env(DEBUG=(bool, False))
+BASE_DIR = Path(__file__).resolve().parent
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+
+DB_USERNAME = env("DB_USERNAME")
+DB_PASSWORD = env("DB_PASSWORD")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,10 +96,22 @@ WSGI_APPLICATION = "api.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# Old Sqlite database
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "game_backlog",
+        "USER": DB_USERNAME,
+        "PASSWORD": DB_PASSWORD,
+        "HOST": "localhost",  # or '127.0.0.1'
+        "PORT": "5432",  # default PostgreSQL port
     }
 }
 

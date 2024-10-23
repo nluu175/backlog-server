@@ -45,7 +45,10 @@ class SuggestionView(APIView):
             # TODO: RAISE error here
             refresh = None
 
-        if refresh is False:  # refresh = True
+        # TODO: implement a decorator to handle these params?
+        if (
+            refresh is False
+        ):  # refresh = False (get the previous suggestion from the database)
             suggestion_game_object = (
                 SuggestionGame.objects.filter(
                     suggestion_type=SuggestionGame.SuggestionTypes.BY_GENRE,
@@ -75,7 +78,7 @@ class SuggestionView(APIView):
                         "game_list": game_list_to_int,
                     }
                 )
-        else:
+        else:  # refresh = True (fetch the new suggestion from the gemini AI)
             if not game_genre_request:
                 return Response(
                     {"error": "No game_genre_request parameter provided."},

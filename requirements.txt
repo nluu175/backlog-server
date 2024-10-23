@@ -4,3 +4,5 @@ requests
 django-environ
 django-cors-headers 
 drf-yasg
+psycopg2
+

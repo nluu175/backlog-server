@@ -30,6 +30,6 @@
 
 ## Instructions
 
-- Run the import data command to import all the game genres
+- Run the import data command to import all the game genres (can be found in `commands/`)
 - Run `source venv`
 - Add `Authorization` header to each request. The template should be `Token {token}`
