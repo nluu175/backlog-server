@@ -10,8 +10,6 @@ class Backlog(models.Model):
     class StatusTypes(models.IntegerChoices):
         NOT_STARTED = 0, "Not Started"
         IN_PROGRESS = 1, "In Progress"
-
-        # TODO: What make a game "Completed"? Can introduce an option to set the game as "Completed" when the user wants to.
         COMPLETED = 2, "Completed"
 
     def __str__(self):
@@ -21,12 +19,14 @@ class Backlog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     status = models.IntegerField(choices=StatusTypes.choices, null=True)
-    rating = models.FloatField(null=True, blank=True)  # personal rating
+    # personal rating is value between 0 and 5
+    rating = models.FloatField(null=True, blank=True)
     comment = models.CharField(max_length=1000, null=True)
     # playtime in minutes
     playtime = models.IntegerField(default=0)
     # new
     favourite = models.BooleanField(null=False, default=False)
+    completed = models.BooleanField(null=False, default=False)
 
     # user and game combination should be unique for each entry
     class Meta:

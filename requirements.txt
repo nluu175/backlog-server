@@ -5,4 +5,4 @@ django-environ
 django-cors-headers 
 drf-yasg
 psycopg2
-
+google-generativeai

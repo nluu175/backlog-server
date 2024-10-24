@@ -60,8 +60,8 @@ class BacklogView(APIView):
 
 # api/backlogs
 class BacklogsView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     http_method_names = ["get", "post"]
 

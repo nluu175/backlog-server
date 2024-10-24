@@ -6,7 +6,8 @@ from ...models.Genre import Genre
 import os
 
 module_dir = os.path.dirname(__file__)  # get current directory
-file_path = os.path.join(module_dir, "genres_list.json")
+# file_path = os.path.join(module_dir, "genres_list.json")
+file_path = os.path.join(module_dir, "top_level_genres_list.json")
 
 
 class Command(BaseCommand):
