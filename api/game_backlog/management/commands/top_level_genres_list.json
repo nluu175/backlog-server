@@ -1,0 +1,13 @@
+[
+  { "name": "Indie" },
+  { "name": "Action" },
+  { "name": "Casual" },
+  { "name": "Adventure" },
+  { "name": "Simulation" },
+  { "name": "RPG" },
+  { "name": "Strategy" },
+  { "name": "Action-Adventure" },
+  { "name": "Sports" },
+  { "name": "Racing" },
+  { "name": "Software" }
+]
