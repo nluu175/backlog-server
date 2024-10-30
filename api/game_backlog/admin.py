@@ -36,7 +36,7 @@ class BacklogAdmin(admin.ModelAdmin):
     list_display = (
         "user",
         "game",
-        "status",
+        # "status",
         "rating",
         "comment",
         "playtime",

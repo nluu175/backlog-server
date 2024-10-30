@@ -10,6 +10,7 @@ from django.db import transaction
 from django.http import HttpRequest
 
 from ..models.Backlog import Backlog
+from ..models.User import User
 from ..serializers.backlog_serializer import BacklogSerializer
 from ..custom.pagination import BacklogPagination
 
@@ -20,8 +21,8 @@ class BacklogView(APIView):
     Endpoint: /api/backlogs/{backlog_id}
     """
 
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+    # permission_classes = [IsAuthenticated]
     http_method_names = ["get", "put"]
 
     def get(self, request: HttpRequest, backlog_id: str) -> Response:
@@ -104,15 +105,15 @@ class BacklogsView(APIView):
 
     def get(self, request: HttpRequest) -> Response:
         """
-        Retrieve all backlog entries with optional pagination.
+        Retrieve all backlog entries with optional pagination, sorted by game name.
 
         Args:
             request: HTTP request object with optional page and size query parameters
 
         Returns:
-            Response containing the serialized backlog data
+            Response containing the serialized backlog data, sorted by game name
         """
-        backlogs = Backlog.objects.select_related("game").all()
+        backlogs = Backlog.objects.select_related("game").all().order_by("game__name")
         page = request.query_params.get("page")
         page_size = request.query_params.get("size")
 
@@ -136,3 +137,64 @@ class BacklogsView(APIView):
 
         backlog = Backlog.objects.create(**serializer.validated_data)
         return Response(BacklogSerializer(backlog).data, status=status.HTTP_201_CREATED)
+
+
+class BacklogsByUserView(APIView):
+    """
+    API View for handling multiple backlog operations filtered by User ID.
+    Endpoint: /api/backlogs
+    """
+
+    http_method_names = ["get"]
+
+    def _handle_pagination(
+        self,
+        queryset: Any,
+        request: HttpRequest,
+        page: Optional[str],
+        page_size: Optional[str],
+    ) -> Response:
+        """
+        Handle pagination of backlog queryset if pagination parameters are provided.
+
+        Args:
+            queryset: The queryset to paginate
+            request: HTTP request object
+            page: Page number
+            page_size: Number of items per page
+
+        Returns:
+            Response with either paginated or full results
+        """
+        if page or page_size:
+            paginator = BacklogPagination()
+            paginated_backlogs = paginator.paginate_queryset(queryset, request)
+            serializer = BacklogSerializer(paginated_backlogs, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
+        serializer = BacklogSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get(self, request: HttpRequest, user_id: str) -> Response:
+        """
+        Retrieve all backlog entries for a specific user, sorted by game name.
+
+        Args:
+            request: HTTP request object with optional page and size query parameters
+            user_id: UUID of the user whose backlogs to retrieve
+
+        Returns:
+            Response containing the serialized backlog data for the specified user
+        """
+
+        get_object_or_404(User, id=user_id)
+
+        backlogs = (
+            Backlog.objects.select_related("game")
+            .filter(user_id=user_id)
+            .order_by("game__name")
+        )
+        page = request.query_params.get("page")
+        page_size = request.query_params.get("size")
+
+        return self._handle_pagination(backlogs, request, page, page_size)

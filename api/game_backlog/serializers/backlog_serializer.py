@@ -12,7 +12,7 @@ class BacklogSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "game",
-            "status",
+            # "status",
             "rating",
             "comment",
             "playtime",

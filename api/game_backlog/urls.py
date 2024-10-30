@@ -40,7 +40,13 @@ urlpatterns = [
         backlog_views.BacklogView.as_view(),
         name="backlog",
     ),
+    path(
+        "backlogs/user/<uuid:user_id>/",
+        backlog_views.BacklogsByUserView.as_view(),
+        name="backlogs-filtered-by-user",
+    ),
     # Wishlists
+    # TODO: Do I really need this? Or can I just use the Backlog model with a wishlist flag?
     path("wishlists/", wishlist_views.WishlistsView.as_view(), name="wishlists"),
     path(
         "wishlists/<uuid:backlog_id>/",

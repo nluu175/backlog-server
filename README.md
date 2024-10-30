@@ -11,14 +11,14 @@
 - Integrate Gemini
 
   > - Suggest game to play based on genre (in library) [DONE]
-  > - Suggest game to buy? [NOT-YET]
+  > - Suggest game to play (not in library)? [NOT-YET]
   > - Suggest a random game to play?
 
 - User can add friend
 
 - Add games release tracker (web scraping) [BIG]
 
-- Add price(float) in Game
+- Add price(float) in Game [UNDER CONSIDERATION]
 
 - Support other platforms (eshop/Nintendo)
 
@@ -26,7 +26,11 @@
 
 - Add table GameSuggestion to cache game request result. [DONE]
 
-- Move all Error and Exception to errors.py
+- Move all Error and Exception to errors.py [DONE]
+
+- Add "How long to beat" a game estimation.
+
+- Add a table to keep track of "Game I wanna play currently"
 
 ## Instructions
 
