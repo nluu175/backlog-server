@@ -29,3 +29,14 @@ Here is the content in a markdown table format:
 - Run `source venv`
 - Add `Authorization` header to each request. The template should be `Token {token}`. Token can be gotten from making a login request.
 - Run `python manage.py import_genres_data`
+
+TODO:
+
+- GameSuggestion
+
+  - make api /user_id/
+
+- UpdateGame
+
+  - make api /user_id/ instead of /steam_id/
+  - this will get the steam_id of the given user_id
