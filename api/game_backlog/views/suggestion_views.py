@@ -11,10 +11,10 @@ from ..models.Backlog import Backlog
 from ..models.SuggestionGame import SuggestionGame
 from ..models.User import User
 from ..services.genai_service import GenAIService
-# from ..utils.response_processor import process_genai_response
+from ..utils.response_processor import process_genai_response
 
 
-class SuggestionView(APIView):
+class SuggestionByGenreView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     http_method_names = ["post"]
@@ -37,16 +37,6 @@ class SuggestionView(APIView):
             raise ValueError("Refresh parameter must be 'true' or 'false'")
 
         return refresh == "true"
-
-    def _process_genai_response(self, response_text: str):
-        if "python\n" in response_text:
-            cleaned_string = response_text.strip().strip("```python\n").strip("```")
-
-        try:
-            return ast.literal_eval(cleaned_string)
-
-        except (ValueError, SyntaxError) as e:
-            raise ValueError(f"Error processing GenAI response: {str(e)}")
 
     def _get_cached_suggestion(self, user: User, genre: str) -> Response:
         # get the latest one from the list
@@ -76,12 +66,13 @@ class SuggestionView(APIView):
             )
 
         try:
-            # Get game list
+            # Get game list from user's backlog
             # NOTE: Only get games of the input genres to reduce the amount of input to Gemini API
             game_list = list(
                 Backlog.objects.select_related("game")
                 .filter(game__genres__code__icontains=genre)
-                .values_list("game__name", "game__steam_app_id")
+                # .values_list("game__name", "game__steam_app_id")
+                .values_list("game__steam_app_id")
                 .distinct()
             )
 
@@ -91,8 +82,9 @@ class SuggestionView(APIView):
             )
 
             # Process response
-            processed_games = self._process_genai_response(genai_response.text)
-            game_ids = [game[1] for game in processed_games]
+            # Clean up response from Gemini
+            processed_games = process_genai_response(genai_response.text)
+            game_ids = [game[0] for game in processed_games]
 
             # Cache suggestion
             SuggestionGame.objects.create(
@@ -101,7 +93,14 @@ class SuggestionView(APIView):
                 game_list=" ".join(map(str, game_ids)),
             )
 
-            return Response({"game_genre": genre, "game_list": game_ids})
+            return Response(
+                {
+                    "game_genre": genre,
+                    "game_list": game_list,
+                    "suggested_games": processed_games,
+                }
+            )  # game list
+            # return Response({"game_genre": genre, "game_list": game_ids}) # final
 
         except Exception as e:
             return Response(

@@ -65,7 +65,7 @@ urlpatterns = [
     path("user/signup/", auth_views.SignUpView.as_view(), name="user-signup"),
     # Suggestion
     path(
-        "suggestions/", suggestion_views.SuggestionView.as_view(), name="ai-suggestion"
+        "suggestions/genre/", suggestion_views.SuggestionByGenreView.as_view(), name="ai-suggestion"
     ),
     # Swagger URLs
     re_path(

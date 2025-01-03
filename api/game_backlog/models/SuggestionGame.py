@@ -9,6 +9,8 @@ class SuggestionGame(models.Model):
     # TODO: Add more types here
     class SuggestionTypes(models.IntegerChoices):
         BY_GENRE = 0, "By Genre"
+        BY_MOOD = 1, "By Mood"
+        BY_LENGTH = 2, "By Length"
 
     class Meta:
         verbose_name = "suggestion game"

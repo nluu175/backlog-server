@@ -40,9 +40,16 @@ TODO:
     > - /api/suggestions/{type}
     >   -- type: ["genre", "mood", "length"]
     >   -- length can be: ["short", "medium", "long"]
+  - filter game suggestion by `completed = True`
 
 - UpdateGame
 
   - make api /user_id/ instead of /steam_id/ [DONE]
   - this will get the steam_id of the given user_id [DONE]
   - improve logic for update game endpoint
+
+- UpdateGame
+
+  - remove temporary random generated genres
+
+- Parse Game Description from Steam API
