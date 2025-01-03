@@ -55,7 +55,7 @@ urlpatterns = [
     ),
     # Refresh
     path(
-        "refresh/<str:steam_id>/",
+        "refresh/<str:user_id>/",
         update_views.UpdateView.as_view(),
         name="backlog-refresh",
     ),

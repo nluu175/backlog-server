@@ -21,8 +21,8 @@ class BacklogView(APIView):
     Endpoint: /api/backlogs/{backlog_id}
     """
 
-    # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     http_method_names = ["get", "put"]
 
     def get(self, request: HttpRequest, backlog_id: str) -> Response:

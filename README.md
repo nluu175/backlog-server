@@ -28,15 +28,21 @@ Here is the content in a markdown table format:
 - Run the import data command to import all the game genres (can be found in `commands/`)
 - Run `source venv`
 - Add `Authorization` header to each request. The template should be `Token {token}`. Token can be gotten from making a login request.
-- Run `python manage.py import_genres_data`
+- Run `python manage.py import_genres_data` to import all the predefined data
 
 TODO:
 
 - GameSuggestion
 
-  - make api /user_id/
+  - make api /user_id/ [DONE] => This currently get user info from request token
+  - add other params for game suggestion
+  - consider using this schema
+    > - /api/suggestions/{type}
+    >   -- type: ["genre", "mood", "length"]
+    >   -- length can be: ["short", "medium", "long"]
 
 - UpdateGame
 
-  - make api /user_id/ instead of /steam_id/
-  - this will get the steam_id of the given user_id
+  - make api /user_id/ instead of /steam_id/ [DONE]
+  - this will get the steam_id of the given user_id [DONE]
+  - improve logic for update game endpoint

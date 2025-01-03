@@ -62,7 +62,7 @@ class UpdateView(APIView):
         # Get all genre IDs
         genre_ids = list(Genre.objects.values_list("id", flat=True))
 
-        # Randomly select 1-3 genres
+        # TODO: Randomly select 1-3 genres
         num_genres = random.randint(1, 3)
 
         # If we have fewer genres than num_genres, use all available genres
@@ -125,18 +125,19 @@ class UpdateView(APIView):
             backlog.save()
 
     @transaction.atomic
-    def post(self, request: HttpRequest, steam_id: str) -> Response:
+    def post(self, request: HttpRequest, user_id: str) -> Response: 
         """
-        Refresh and update the backlog for user with id steam_id.
+        Refresh and update the backlog for user with id: user_id.
 
         Args:
             request: HTTP request object
-            steam_id: Steam ID of the user
+            user_id: Steam ID of the user
 
         Returns:
             Response with updated games data or error message
         """
-        user = get_object_or_404(User, steam_id=steam_id)
+        user = get_object_or_404(User, id=user_id)
+        steam_id = user.steam_id
 
         try:
             games_data = self._fetch_steam_games(steam_id)
