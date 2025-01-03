@@ -4,25 +4,6 @@
 
 - Welcome to the Backlog API documentation. This API was implemented to serve the Game Backlog App - A web-based application to help manage your game backlog in many gaming platforms.
 
-## TODO:
-
-Here is the content in a markdown table format:
-
-| Task                                                                                                                                                         | Status                 |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| Add transactions [Official Doc](https://docs.djangoproject.com/en/5.1/topics/db/transactions/) <br> - `with transaction.atomic():`                           | DONE                   |
-| Integrate Gemini <br> - Suggest game to play based on genre (in library) <br> - Suggest game to play (not in library)? <br> - Suggest a random game to play? | <br> DONE <br> NOT-YET |
-| User can add friend                                                                                                                                          | -                      |
-| Add games release tracker (web scraping)                                                                                                                     | BIG                    |
-| Add price(float) in Game                                                                                                                                     | UNDER CONSIDERATION    |
-| Support other platforms (eshop/Nintendo)                                                                                                                     | -                      |
-| Authenticate/Authorize using token                                                                                                                           | DONE                   |
-| Add table GameSuggestion to cache game request result                                                                                                        | DONE                   |
-| Move all Error and Exception to errors.py                                                                                                                    | DONE                   |
-| Add "How long to beat" a game estimation                                                                                                                     | -                      |
-| Add a table to keep track of "Game I wanna play currently"                                                                                                   | -                      |
-| Add `first` and `last` fields for pagination                                                                                                                 | -                      |
-
 ## Instructions
 
 - Run the import data command to import all the game genres (can be found in `commands/`)
@@ -41,6 +22,9 @@ TODO:
     >   -- type: ["genre", "mood", "length"]
     >   -- length can be: ["short", "medium", "long"]
   - filter game suggestion by `completed = True`
+  - how long to beat?
+
+  - NOTE: We can tune the model to work for ... only
 
 - UpdateGame
 
@@ -53,3 +37,7 @@ TODO:
   - remove temporary random generated genres
 
 - Parse Game Description from Steam API
+
+- Can add average score from steam to the game rating field (Game.steam_rating)
+
+- Add a game release tracker

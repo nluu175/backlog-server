@@ -44,6 +44,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Other Apps
     "game_backlog.apps.GameBacklogConfig",
+    # Django Jazzmin
+    "jazzmin",
     # Django default Apps
     "django.contrib.admin",
     "django.contrib.auth",
