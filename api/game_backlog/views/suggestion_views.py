@@ -93,14 +93,14 @@ class SuggestionByGenreView(APIView):
                 game_list=" ".join(map(str, game_ids)),
             )
 
-            return Response(
-                {
-                    "game_genre": genre,
-                    "game_list": game_list,
-                    "suggested_games": processed_games,
-                }
-            )  # game list
-            # return Response({"game_genre": genre, "game_list": game_ids}) # final
+            # return Response(
+            #     {
+            #         "game_genre": genre,
+            #         "game_list": game_list,
+            #         "suggested_games": processed_games,
+            #     }
+            # )  # game list
+            return Response({"game_genre": genre, "game_list": game_ids})  # final
 
         except Exception as e:
             return Response(
