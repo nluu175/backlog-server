@@ -10,6 +10,8 @@ import ast
 from ..models.Backlog import Backlog
 from ..models.SuggestionGame import SuggestionGame
 from ..models.User import User
+from ..models.Genre import Genre
+
 from ..services.genai_service import GenAIService
 from ..utils.response_processor import process_genai_response
 
@@ -25,7 +27,16 @@ class SuggestionByGenreView(APIView):
 
     def _parse_genre_param(self, game_genre: str) -> str:
         """Parse and validate the game_genre parameter."""
-        return
+
+        if not game_genre:
+            raise ValueError("game_genre parameter is required")
+
+        genres = list(Genre.objects.values_list("code", flat=True))
+
+        if game_genre.lower() not in genres:
+            raise ValueError(f"Invalid genre. Must be one of: {', '.join(genres)}")
+
+        return game_genre.lower()
 
     def _parse_refresh_param(self, refresh: str) -> bool:
         """Parse and validate the refresh parameter."""
@@ -119,7 +130,7 @@ class SuggestionByGenreView(APIView):
         try:
             # Get and validate parameters
             user = User.objects.get(user=request.user)
-            genre = request.query_params.get("game_genre")
+            genre = self._parse_genre_param(request.query_params.get("game_genre"))
             refresh = self._parse_refresh_param(request.query_params.get("refresh"))
 
             # Return new suggestions if refresh is True else returns cache

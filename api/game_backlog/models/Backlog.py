@@ -26,7 +26,7 @@ class Backlog(models.Model):
             MaxValueValidator(5, message="Rating cannot exceed 5"),
         ],
     )
-    comment = models.CharField(max_length=1000, null=True)
+    comment = models.CharField(max_length=1000, null=True, blank=True)
     # playtime is measured in minutes
     playtime = models.IntegerField(default=0)
     favourite = models.BooleanField(null=False, default=False)
