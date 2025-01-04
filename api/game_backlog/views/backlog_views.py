@@ -113,10 +113,10 @@ class BacklogsView(APIView):
         Returns:
             Response containing the serialized backlog data, sorted by game name
         """
-        search_query = request.query_params.get("search", "").strip()
+        backlogs = Backlog.objects.select_related("game").all()
 
+        search_query = request.query_params.get("search", "").strip()
         if search_query:
-            backlogs = Backlog.objects.select_related("game").all()
             backlogs = backlogs.filter(game__name__icontains=search_query)
 
         backlogs = backlogs.order_by("game__name")
